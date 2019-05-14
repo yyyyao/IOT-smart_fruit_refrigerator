@@ -1,3 +1,6 @@
+#################################################
+##Usage: python camera_weight.py <machinecode>###
+#################################################
 from picamera import PiCamera
 import time
 import sys
