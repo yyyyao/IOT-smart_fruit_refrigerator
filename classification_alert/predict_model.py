@@ -30,9 +30,9 @@ import matplotlib.pyplot as plt
 class Args():
     def __init__(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument('--baseDir', type=str, default="/home/ubuntu/")
-        parser.add_argument('--dataDir', type=str, default="~/fruits-360/")
-        parser.add_argument('--saveDir', type=str, default="Iot-Fruit/save/1/")
+        parser.add_argument('--baseDir', type=str, default="")
+        parser.add_argument('--dataDir', type=str, default="")
+        parser.add_argument('--saveDir', type=str, default="")
         parser.add_argument('--epoch', type=int, default=10)
         parser.add_argument('--batchSize', type=int, default=32)
         parser.add_argument('--width', type=int, default=96)
@@ -42,7 +42,7 @@ class Args():
         parser.add_argument('--train_num', type=int, default=0)
         parser.add_argument('--test_num', type=int, default=0)
         parser.add_argument('--plot', type=bool, default=True)
-        parser.add_argument('--argspath', type=str, default='Iot-Fruit/save/1/args.pkl')
+        parser.add_argument('--argspath', type=str, default='')
         parser.add_argument('--img', type=str, default=None)
         self.args = parser.parse_args()
 
