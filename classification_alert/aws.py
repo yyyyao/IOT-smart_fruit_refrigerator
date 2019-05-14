@@ -11,7 +11,7 @@
 # Used in ../dataAnalysis/S3.py and ../dataAnalysis/createAMLModel.py
 
 import boto3
-COGNITO_ID = "EdisonApp"
+COGNITO_ID = ""
 
 
 def getCredentials():
@@ -22,7 +22,7 @@ def getCredentials():
     # Use cognito to get an identity from AWS for the application residing on Edison
     # boto3.client function helps you get a client object of any AWS service
     # Here for example we are getting a client object of AWS cognito service
-    cognito = boto3.client('cognito-identity','us-east-1')
+    cognito = boto3.client('cognito-identity','')
     cognito_id = cognito.get_id(AccountId=ACCOUNT_ID, IdentityPoolId=IDENTITY_POOL_ID)
     oidc = cognito.get_open_id_token(IdentityId=cognito_id['IdentityId'])
 
