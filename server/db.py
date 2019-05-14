@@ -1,12 +1,4 @@
 #!/usr/bin/env python
-# encoding: utf-8
-# ******************************************************
-# Author       : LIU JIAQI
-# Last modified: 2019-04-28 21:54
-# Email        : liujq1313@gmail.com
-# Filename     : db.py
-# Description  :
-# ******************************************************
 import boto3
 import aws
 from boto3.dynamodb.conditions import Key,Attr
