@@ -98,26 +98,15 @@ def update_fruit(email):
     fruit name | expire date | amount
     """
     result = {}
-    # fruit_dic = {"fruit_id": [], "fruit_name" : [], "expire_date" : [], "amount" : []}
-    # print machine
     machine = get_machine_on_email(email)
     table = dynamodb.Table('fruit-img')
     response = table.scan(FilterExpression=Attr('machine').eq(machine))
-    # print response
     for i in response['Items']:
-        # print i
         fruit_name = i['fruit_name']
         if fruit_name != 'NOT':
-            # putin_date = i['time_now']s
             fruit_id = i['imgId']
             amount = int(i['amount'])
-            # expire_period = expire_table.get_item(Key={'fruit_name':fruit_name})['Item']['expire_period']
-            # expire_date = putin_date + expire_period
             expire_date = datetime.fromtimestamp(i['expire_date'],TIMEZONE).strftime("%m/%d/%Y, %H:%M:%S")
-            # fruit_dic['fruit_id'].append(fruit_id)
-            # fruit_dic['fruit_name'].append(fruit_name)
-            # fruit_dic['expire_date'].append(expire_date)
-            # fruit_dic['amount'].append(amount)
             result[fruit_id] = {'fruit_name': fruit_name, 'expire_date' : expire_date, 'amount': str(amount)}
     print result
     return result
@@ -125,7 +114,6 @@ def update_fruit(email):
 def update_amount(amount_dic):
     """update the update_amount of the fruit"""
     table = dynamodb.Table('fruit-img')
-    # item = table.get_item(Key = {'email' : amount_dic.keys()[0]})
     for key, value in amount_dic.items():
         if key != "email":
             old_record = table.get_item(Key = {'imgId' : key})['Item']
@@ -147,18 +135,15 @@ def get_machine_on_email(email):
     """Get machine code baseds on email"""
     table = dynamodb.Table('fruit-user')
     response = table.get_item(Key={'email':email})
-    # print response
     machine = response['Item']['machine']
     return machine
 
 
 def get_out_of_date_fruit(email, alter_time):
     """get fruit older than curtime - alter_time"""
-    # fruit = []
     machine = get_machine_on_email(email)
     curtime = calendar.timegm(time.gmtime())
     table = dynamodb.Table('fruit-img')
-    # print curtime
     threhold = curtime+alter_time
     response = table.scan(FilterExpression=Attr('expire_date').lt(threhold) & Attr('machine').eq(machine))
     print response
@@ -166,7 +151,6 @@ def get_out_of_date_fruit(email, alter_time):
 
 def update_eaten(fruit_name, machine, weight, amount):
     """give the fruit a eaten date, imgId is the id of the fruit"""
-    # machine = get_machine_on_email(email)
     table = dynamodb.Table('fruit-log')
     eatendate = calendar.timegm(time.gmtime())
     print('eatendate = {}'.format(eatendate))
@@ -205,20 +189,6 @@ def cal_vitamin(email, day):
     results = table.scan(FilterExpression=Attr('eaten_time').gt(threhold) & Attr('machine').eq(machine))
     print results
     print results['Count']
-    # try: 
-    #     # The oldest record is older than cal day
-    #     actual_day = DAY
-    #     print(results['Items'])
-    #     results['Items'][0]['machine']
-    #     results = table.scan(FilterExpression=Attr('eaten_time').lt(threhold) & Attr('machine').eq(machine))
-    # except Exception as e:
-    #     print e
-    #     results = table.scan(FilterExpression = Attr('machine').eq(machine))
-    #     min_time = float('inf')
-    #     for i in results['Items']:
-    #         if i['eaten_time'] < min_time:
-    #             min_time = i['eaten_time']
-    #     actual_day = curtime - min_time
     total = np.array([0,0,0,0,0]).astype(float)
     try:
         for i in results['Items']:
@@ -229,11 +199,6 @@ def cal_vitamin(email, day):
     except Exception as e:
         print('error{}'.format(e))
         pass
-    # transfer actual_day to day
-    # cal_period = int(math.ceil(actual_day/86400))
-    # print('total tpye = {}'.format(type(list(total))))
-    # print ('total_vit = {}'.format(total))
-    # print ('days = {}'.format(cal_period))
     total = np.around(total/100, decimals=2)
     total = list(total)
     cal_period = None
@@ -250,12 +215,6 @@ def cal_fruit_vitamin(fruit_name, weight, amount):
                     represent ["A", "B1", "B2", "B6" , "C"]
     """
     vit_total = []
-    # response = vitamin_table.get_item(Key={'fruit_name':fruit_name})['Item']
-    # vit_total.append(response['A']*amount)
-    # vit_total.append(response['B1']*amount)
-    # vit_total.append(response['B2']*amount)
-    # vit_total.append(response['B6']*amount)
-    # vit_total.append(response['C']*amount)
     vitamin_df = pd.read_csv('vitamin.csv', index_col = 0)
     # print vitamin_df
     weight = weight/100.0
@@ -271,18 +230,13 @@ def recommend_fruit(total, limit):
           :limit <int>
     Output :results_list [<str>] list of fruit_name
     """
-    # total, day = cal_vitamin(email)
-    # total.astype(float)
+
     total = np.array(total).astype(float)
     total_trans = total/one_day
-    # print total_trans
     val, min_key = min((val, idx) for (idx, val) in np.ndenumerate(total_trans))
-    # print "minkey={}".format(min_key)
     min_vit = vit_dic[min_key[0]]
-    # print min_vit
     results = get_fruit_high_in_vit(min_vit, limit)
     return results
-    # result = vitamin_df.sort_values(by=)
 
 def get_fruit_high_in_vit(vitamin, limit):
     """
@@ -297,26 +251,4 @@ def get_fruit_high_in_vit(vitamin, limit):
     print results_list
     return results_list
 
-
-if __name__ == '__main__':
-    # create_user({'email':'tl2861@columbia.edu', 'password' : '0000', 'machine' : '0001'})
-    # print('success crease')
-    # print(check_email('904985646@qq.com'))
-    # print(check_email('904983646@qq.com'))
-    # print(check_login('904985646@qq.com','0000'))
-    # print(check_login('904985646@qq.com','0001'))
-    # print(check_login('904983646@qq.com','0001'))
-    # update_fruit('904985646@qq.com')
-    # update_eaten('0001_1557020941.jpg')
-    # get_out_of_date_fruit('904985646@qq.com',3)
-    # delete_fruit('0001_1557021175.jpg')
-    update_amount({'0001_1557258727.jpg':17})
-    update_amount({'0001_1557258727.jpg':16})
-    total, cal_period = cal_vitamin('904985646@qq.com',1)
-    print(total)
-    # print(cal_period)
-    recommend_fruit(total, 3)
-    # vitamin_df = pd.read_csv('vitamin.csv', index_col = 0)
-    # print vitamin_df.columns
-    # print vitamin_df.nlargest(3, 'A')
 
