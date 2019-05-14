@@ -11,7 +11,7 @@ import os
 
 
 temp = []
-with open('/home/liujiaqi/fruits-360/class2.txt', 'r') as f:
+with open('', 'r') as f:
     for val in f.readlines():
         if val != '\n':
             temp.append(val.strip())
@@ -19,8 +19,8 @@ labels = {}
 for i in range(len(temp)):
    labels[temp[i]] = i
 
-TRAIN_BASE_DIR = '/home/liujiaqi/fruits-360/Training'
-TEST_BASE_DIR = '/home/liujiaqi/fruits-360/Test'
+TRAIN_BASE_DIR = ''
+TEST_BASE_DIR = ''
 
 def create(BASE_DIR):
     files = []
