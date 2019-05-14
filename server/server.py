@@ -14,24 +14,9 @@ from flask import Flask, request, g, redirect, Response
 from db import check_login, create_user, check_email, update_fruit, update_amount, cal_vitamin, recommend_fruit
 
 app = Flask(__name__)
-app.secret_key = b'sfae2234@sdf#2##'
+app.secret_key = b''
 
 
-# @app.before_request
-# def before_request():
-#     try:
-#         g.conn = connect_db()
-#     except Exception as e:
-#         print "Problem connecting to databse"
-#         import traceback
-#         traceback.print_exc()
-
-# @app.teardown_request
-# def teardown_request(exception):
-#     try:
-#         g.conn.close()
-#     except Exception as e:
-#         pass
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -123,17 +108,6 @@ if __name__ == "__main__":
     @click.argument('HOST', default='0.0.0.0')
     @click.argument('PORT', default=8000, type=int)
     def run(debug, threaded, host, port):
-        """
-        This function handles command line parameters.
-        Run the server using
-
-            python server.py
-
-        Show the help text using
-
-            python server.py --help
-
-        """
 
         HOST, PORT = host, port
         print "running on %s:%d" % (HOST, PORT)
