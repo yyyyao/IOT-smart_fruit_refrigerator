@@ -15,7 +15,7 @@ import numpy as np
 import math
 from operator import itemgetter
 import pandas as pd
-# DATABASEURI = "postgresql://liujq13:kongkong13@localhost/fruit"
+# DATABASEURI = "postgresql://xxxxxxx@localhost/fruit"
 # engine = create_engine(DATABASEURI)
 
 snsClient = aws.getClient("sns","us-east-1")
